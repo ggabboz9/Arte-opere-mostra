@@ -7,9 +7,12 @@
     <style>
         :root {
             --gold: #d4af37;
+            --gold-bright: #fff9e6; 
+            --gold-light: #f4d03f;  
+            --gold-dark: #a88e5a;
             --dark-blue: #1a252f;
             --bg-color: #f4f4f2;
-            --highlight: rgba(212, 175, 55, 0.3);
+            --highlight: rgba(212, 175, 55, 0.4);
         }
 
         body {
@@ -23,27 +26,63 @@
             min-height: 100vh;
         }
 
-        /* Ripristino della cornice classica */
-        .art-card {
-            background: white;
-            width: 90%;
-            max-width: 500px;
-            padding: 30px;
-            border: 15px solid var(--dark-blue);
-            border-image: linear-gradient(45deg, #a88e5a, #d4af37, #a88e5a) 1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
+        .art-card-container {
             position: relative;
+            padding: 15px; 
+            background: var(--gold-dark);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border-radius: 4px;
+            overflow: hidden; 
+            background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
         }
 
-        .content {
-            padding: 10px;
+        .light-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: move-light 10s linear infinite;
+            filter: blur(8px);
+            opacity: 0.9;
+        }
+
+        @keyframes move-light {
+            0%   { top: -75px; left: -75px; }            
+            25%  { top: -75px; left: calc(100% - 75px); } 
+            50%  { top: calc(100% - 75px); left: calc(100% - 75px); } 
+            75%  { top: calc(100% - 75px); left: -75px; } 
+            100% { top: -75px; left: -75px; }            
+        }
+
+        .art-card-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px;
+            text-align: center;
         }
 
         h1 {
             color: var(--dark-blue);
             font-size: 1.6rem;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -51,9 +90,22 @@
         .artist-name {
             font-style: italic;
             color: #666;
-            margin-bottom: 25px;
+            margin-bottom: 4px;
             display: block;
             font-size: 1.1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(102, 102, 102, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 12px; /* Ridotto da 25px */
+            line-height: 1.5;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 10px;
         }
 
         .description {
@@ -62,13 +114,13 @@
             margin-bottom: 30px;
             text-align: left;
             color: #333;
-            transition: background-color 0.2s;
+            min-height: 100px;
         }
 
-        /* Evidenziatore dinamico */
         .word-highlight {
             background-color: var(--highlight);
             border-radius: 3px;
+            box-shadow: 0 0 5px var(--gold);
         }
 
         .controls-panel {
@@ -80,29 +132,50 @@
         }
 
         .main-btn {
-            background-color: var(--dark-blue);
+            position: relative;
+            background: linear-gradient(to bottom, #d4af37, #a88e5a);
             color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 1.1rem;
+            border: 1px solid #8a6d3b;
+            padding: 14px 25px;
+            font-size: 0.95rem;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             cursor: pointer;
-            border-radius: 50px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             margin: 0 auto;
-            transition: transform 0.2s, background-color 0.2s;
+            transition: all 0.2s ease-in-out;
             width: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
 
-        .main-btn:active {
-            transform: scale(0.96);
+        .main-btn:hover {
+            transform: translateY(2px); 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+            filter: brightness(1.05);
         }
 
-        .main-btn.playing {
-            background-color: #c0392b;
+        .main-btn:active { 
+            transform: translateY(4px); 
+            box-shadow: none;
+        }
+
+        .btn-icon-svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .main-btn.playing { 
+            background: linear-gradient(to bottom, #1a252f, #0d1318);
+            border-color: #000;
         }
 
         .speed-control {
@@ -119,34 +192,44 @@
             color: #999;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 5px;
         }
 
         input[type=range] {
             accent-color: var(--gold);
+            cursor: pointer;
+            width: 120px;
         }
     </style>
 </head>
 <body>
 
-    <div class="art-card">
-        <div class="content">
-            <h1 id="title">Il Viandante sul mare di nebbia</h1>
-            <span class="artist-name">Caspar David Friedrich, 1818</span>
-            
-            <div class="description" id="textToRead">Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore. Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.</div>
-
-            <div class="controls-panel">
-                <div id="statusLabel" class="status-msg">Guida pronta all'uso</div>
+    <div class="art-card-container">
+        <div class="light-glow"></div>
+        
+        <div class="art-card">
+            <div class="content">
+                <h1 id="title">Il Viandante sul mare di nebbia</h1>
+                <span class="artist-name">Caspar David Friedrich, 1818</span>
+                <span class="quote">Dipinto da Gabriele Branciforti 3C A.S.25/26</span>
                 
-                <button id="mainBtn" class="main-btn" onclick="toggleAudio()">
-                    <span id="btnIcon">🔈</span>
-                    <span id="btnText">Ascolta la descrizione</span>
-                </button>
+                <div class="description" id="textToRead">Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore. Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.</div>
 
-                <div class="speed-control">
-                    <span>Velocità:</span>
-                    <input type="range" id="speedRange" min="0.7" max="1.3" step="0.1" value="0.95">
-                    <span id="speedVal">0.9x</span>
+                <div class="controls-panel">
+                    <div id="statusLabel" class="status-msg">Guida pronta all'uso</div>
+                    
+                    <button id="mainBtn" class="main-btn" onclick="toggleAudio()">
+                        <span id="btnIconContainer">
+                            <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>
+                        </span>
+                        <span id="btnText">Ascolta la descrizione</span>
+                    </button>
+
+                    <div class="speed-control">
+                        <span>Velocità:</span>
+                        <input type="range" id="speedRange" min="5" max="20" step="1" value="10">
+                        <span id="speedVal">1.0x</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -155,64 +238,102 @@
     <script>
         const synth = window.speechSynthesis;
         let utterance = null;
-        let isSpeaking = false;
         const textToRead = document.getElementById('textToRead');
         const originalHTML = textToRead.innerHTML;
+        
+        const playIcon = `<svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>`;
+        const stopIcon = `<svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M18,18H6V6H18V18Z" /></svg>`;
 
-        // Aggiorna valore velocità a video
+        let lastCharIndex = 0; 
+        let isInternalAction = false; 
+
+        function getRealRate(val) {
+            const visualVal = val / 10;
+            if (visualVal <= 1.0) return visualVal; 
+            return 1.0 + (visualVal - 1.0) * 0.45;
+        }
+
+        function humanizeText(text) {
+            return text
+                .replace(/\./g, '... ') 
+                .replace(/,/g, ', ')    
+                .replace(/ Friedrich/g, ' Fried-rich'); 
+        }
+
         document.getElementById('speedRange').oninput = (e) => {
-            document.getElementById('speedVal').innerText = e.target.value + "x";
+            const visualValue = (e.target.value / 10).toFixed(1);
+            document.getElementById('speedVal').innerText = visualValue + "x";
+            
+            if (synth.speaking) {
+                isInternalAction = true;
+                synth.cancel();
+                setTimeout(() => {
+                    startAudio(lastCharIndex);
+                    isInternalAction = false;
+                }, 10);
+            }
         };
 
         function toggleAudio() {
+            isInternalAction = true;
             if (synth.speaking) {
                 synth.cancel();
+                lastCharIndex = 0;
                 resetUI();
+                setTimeout(() => { isInternalAction = false; }, 50);
                 return;
             }
-            startAudio();
+            synth.cancel(); 
+            startAudio(0);
+            isInternalAction = false;
         }
 
-        function startAudio() {
-            synth.cancel(); // Reset
+        function startAudio(startIndex = 0) {
+            const fullText = textToRead.innerText;
+            const textToSpeak = fullText.substring(startIndex);
+            const processedText = humanizeText(textToSpeak);
 
-            utterance = new SpeechSynthesisUtterance(textToRead.innerText);
+            utterance = new SpeechSynthesisUtterance(processedText);
             utterance.lang = 'it-IT';
-            utterance.rate = document.getElementById('speedRange').value;
-            utterance.pitch = 1.0;
+            utterance.rate = getRealRate(document.getElementById('speedRange').value);
+            utterance.pitch = 0.95; 
+            utterance.volume = 1.0;
 
-            // Selezione della voce migliore (se disponibile)
             const voices = synth.getVoices();
-            const preferredVoice = voices.find(v => v.lang.includes('it-IT') && (v.name.includes('Google') || v.name.includes('Natural')));
-            if (preferredVoice) utterance.voice = preferredVoice;
+            const preferredVoice = voices.find(v => 
+                v.lang.includes('it-IT') && 
+                (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Premium'))
+            ) || voices.find(v => v.lang.includes('it-IT'));
 
-            // Keep-alive per browser mobile
-            const timer = setInterval(() => {
-                if (!synth.speaking) clearInterval(timer);
-                else { synth.pause(); synth.resume(); }
-            }, 10000);
+            if (preferredVoice) utterance.voice = preferredVoice;
 
             utterance.onboundary = (event) => {
                 if (event.name === 'word') {
-                    highlightWord(event.charIndex, event.charLength);
+                    const globalIndex = startIndex + event.charIndex;
+                    lastCharIndex = globalIndex;
+                    highlightWord(globalIndex, event.charLength);
                 }
             };
 
             utterance.onstart = () => {
-                isSpeaking = true;
                 document.getElementById('mainBtn').classList.add('playing');
                 document.getElementById('btnText').innerText = "Ferma Audio";
-                document.getElementById('btnIcon').innerText = "⏹";
+                document.getElementById('btnIconContainer').innerHTML = stopIcon;
                 document.getElementById('statusLabel').innerText = "Lettura in corso...";
             };
 
             utterance.onend = () => {
-                resetUI();
+                if (!isInternalAction) {
+                    lastCharIndex = 0;
+                    resetUI();
+                }
             };
 
-            utterance.onerror = () => {
-                resetUI();
-                document.getElementById('statusLabel').innerText = "Errore audio. Riprova.";
+            utterance.onerror = (e) => {
+                if (!isInternalAction && e.error !== 'interrupted' && e.error !== 'canceled') {
+                    resetUI();
+                    document.getElementById('statusLabel').innerText = "Errore audio. Riprova.";
+                }
             };
 
             synth.speak(utterance);
@@ -227,12 +348,15 @@
         }
 
         function resetUI() {
-            isSpeaking = false;
             textToRead.innerHTML = originalHTML;
             document.getElementById('mainBtn').classList.remove('playing');
             document.getElementById('btnText').innerText = "Ascolta la descrizione";
-            document.getElementById('btnIcon').innerText = "🔈";
+            document.getElementById('btnIconContainer').innerHTML = playIcon;
             document.getElementById('statusLabel').innerText = "Guida pronta all'uso";
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => synth.getVoices();
         }
 
         window.onbeforeunload = () => synth.cancel();
