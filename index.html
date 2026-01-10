@@ -8,7 +8,8 @@
         :root {
             --gold: #d4af37;
             --dark-blue: #1a252f;
-            --bg-color: #f8f9fa;
+            --bg-color: #f4f4f2;
+            --highlight: rgba(212, 175, 55, 0.3);
         }
 
         body {
@@ -22,204 +23,219 @@
             min-height: 100vh;
         }
 
+        /* Ripristino della cornice classica */
         .art-card {
             background: white;
-            width: 100%;
-            max-width: 450px;
-            border: 12px solid var(--dark-blue);
-            border-image: linear-gradient(45deg, #a88e5a, #f7e0a1, #a88e5a) 1;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .image-container {
-            width: 100%;
-            background-color: #eee;
-            border-bottom: 2px solid #ddd;
-            line-height: 0;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border: 15px solid var(--dark-blue);
+            border-image: linear-gradient(45deg, #a88e5a, #d4af37, #a88e5a) 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
         }
 
         .content {
-            padding: 25px;
-            text-align: center;
+            padding: 10px;
         }
 
         h1 {
             color: var(--dark-blue);
             font-size: 1.6rem;
-            margin: 0 0 10px 0;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .artist-name {
             font-style: italic;
             color: #666;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: block;
+            font-size: 1.1rem;
         }
 
         .description {
-            color: #333;
+            font-size: 1.15rem;
             line-height: 1.7;
+            margin-bottom: 30px;
             text-align: left;
-            margin-bottom: 25px;
-            font-size: 1.05rem;
-            border-left: 3px solid var(--gold);
-            padding-left: 15px;
+            color: #333;
+            transition: background-color 0.2s;
         }
 
-        .audio-controls {
+        /* Evidenziatore dinamico */
+        .word-highlight {
+            background-color: var(--highlight);
+            border-radius: 3px;
+        }
+
+        .controls-panel {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
         }
 
-        .btn-audio {
+        .main-btn {
             background-color: var(--dark-blue);
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 8px;
-            font-size: 1rem;
+            padding: 15px 25px;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
+            border-radius: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            user-select: none;
+            margin: 0 auto;
+            transition: transform 0.2s, background-color 0.2s;
+            width: 100%;
         }
 
-        .btn-audio:active {
-            transform: translateY(2px);
-            box-shadow: none;
+        .main-btn:active {
+            transform: scale(0.96);
         }
 
-        .btn-audio.playing {
+        .main-btn.playing {
             background-color: #c0392b;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #777;
         }
 
         .status-msg {
             font-size: 0.8rem;
-            color: #888;
-            margin-top: 5px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .icon-speaker::before { content: '🔊'; }
-        .icon-stop::before { content: '⏹'; }
-
+        input[type=range] {
+            accent-color: var(--gold);
+        }
     </style>
 </head>
 <body>
 
     <div class="art-card">
-        <div class="image-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Caspar_David_Friedrich_-_Wanderer_over_the_sea_of_fog.jpg/800px-Caspar_David_Friedrich_-_Wanderer_over_the_sea_of_fog.jpg" alt="Il Viandante sul mare di nebbia" onerror="this.src='https://via.placeholder.com/600x400?text=Immagine+Opera'">
-        </div>
-
         <div class="content">
             <h1 id="title">Il Viandante sul mare di nebbia</h1>
             <span class="artist-name">Caspar David Friedrich, 1818</span>
             
-            <div class="description" id="textToRead">
-                Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore.
-                Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.
-            </div>
+            <div class="description" id="textToRead">Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore. Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.</div>
 
-            <div class="audio-controls">
-                <button id="audioBtn" class="btn-audio" onclick="handleAudio()">
-                    <span id="btnIcon" class="icon-speaker"></span>
+            <div class="controls-panel">
+                <div id="statusLabel" class="status-msg">Guida pronta all'uso</div>
+                
+                <button id="mainBtn" class="main-btn" onclick="toggleAudio()">
+                    <span id="btnIcon">🔈</span>
                     <span id="btnText">Ascolta la descrizione</span>
                 </button>
-                <div id="statusLabel" class="status-msg">Tocca per avviare la guida vocale</div>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="0.7" max="1.3" step="0.1" value="0.95">
+                    <span id="speedVal">0.9x</span>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Gestione globale per evitare che il garbage collector interrompa l'audio
-        let synth = window.speechSynthesis;
-        let currentUtterance = null;
+        const synth = window.speechSynthesis;
+        let utterance = null;
         let isSpeaking = false;
+        const textToRead = document.getElementById('textToRead');
+        const originalHTML = textToRead.innerHTML;
 
-        // Pre-caricamento delle voci (necessario per alcuni browser mobile)
-        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => {
-                speechSynthesis.getVoices();
-            };
-        }
+        // Aggiorna valore velocità a video
+        document.getElementById('speedRange').oninput = (e) => {
+            document.getElementById('speedVal').innerText = e.target.value + "x";
+        };
 
-        function handleAudio() {
-            const btn = document.getElementById('audioBtn');
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const statusLabel = document.getElementById('statusLabel');
-            const text = document.getElementById('textToRead').innerText;
-
-            if (isSpeaking || synth.speaking) {
+        function toggleAudio() {
+            if (synth.speaking) {
                 synth.cancel();
                 resetUI();
                 return;
             }
+            startAudio();
+        }
 
-            // Pulizia preventiva di eventuali istanze residue
-            synth.cancel();
+        function startAudio() {
+            synth.cancel(); // Reset
 
-            currentUtterance = new SpeechSynthesisUtterance(text);
-            currentUtterance.lang = 'it-IT';
-            currentUtterance.rate = 0.95;
-            currentUtterance.pitch = 1.0;
+            utterance = new SpeechSynthesisUtterance(textToRead.innerText);
+            utterance.lang = 'it-IT';
+            utterance.rate = document.getElementById('speedRange').value;
+            utterance.pitch = 1.0;
 
-            currentUtterance.onstart = () => {
+            // Selezione della voce migliore (se disponibile)
+            const voices = synth.getVoices();
+            const preferredVoice = voices.find(v => v.lang.includes('it-IT') && (v.name.includes('Google') || v.name.includes('Natural')));
+            if (preferredVoice) utterance.voice = preferredVoice;
+
+            // Keep-alive per browser mobile
+            const timer = setInterval(() => {
+                if (!synth.speaking) clearInterval(timer);
+                else { synth.pause(); synth.resume(); }
+            }, 10000);
+
+            utterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    highlightWord(event.charIndex, event.charLength);
+                }
+            };
+
+            utterance.onstart = () => {
                 isSpeaking = true;
-                btn.classList.add('playing');
-                btnText.innerText = "Interrompi lettura";
-                btnIcon.className = "icon-stop";
-                statusLabel.innerText = "Riproduzione in corso...";
+                document.getElementById('mainBtn').classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Audio";
+                document.getElementById('btnIcon').innerText = "⏹";
+                document.getElementById('statusLabel').innerText = "Lettura in corso...";
             };
 
-            currentUtterance.onend = () => {
+            utterance.onend = () => {
                 resetUI();
             };
 
-            currentUtterance.onerror = (event) => {
-                console.error("Errore Sintesi Vocale:", event);
+            utterance.onerror = () => {
                 resetUI();
-                statusLabel.innerText = "Errore: riprova o controlla il volume.";
+                document.getElementById('statusLabel').innerText = "Errore audio. Riprova.";
             };
 
-            // Avvio effettivo
-            synth.speak(currentUtterance);
+            synth.speak(utterance);
+        }
+
+        function highlightWord(charIndex, charLength) {
+            const text = textToRead.innerText;
+            const before = text.substring(0, charIndex);
+            const word = text.substring(charIndex, charIndex + charLength);
+            const after = text.substring(charIndex + charLength);
+            textToRead.innerHTML = `${before}<span class="word-highlight">${word}</span>${after}`;
         }
 
         function resetUI() {
-            const btn = document.getElementById('audioBtn');
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const statusLabel = document.getElementById('statusLabel');
-            
             isSpeaking = false;
-            btn.classList.remove('playing');
-            btnText.innerText = "Ascolta la descrizione";
-            btnIcon.className = "icon-speaker";
-            statusLabel.innerText = "Tocca per avviare la guida vocale";
+            textToRead.innerHTML = originalHTML;
+            document.getElementById('mainBtn').classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta la descrizione";
+            document.getElementById('btnIcon').innerText = "🔈";
+            document.getElementById('statusLabel').innerText = "Guida pronta all'uso";
         }
 
-        // Blocco audio all'uscita per evitare "voci fantasma"
-        window.addEventListener('beforeunload', () => {
-            synth.cancel();
-        });
+        window.onbeforeunload = () => synth.cancel();
     </script>
 
 </body>
