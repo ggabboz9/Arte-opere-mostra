@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli Opera d'Arte</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #fff9e6; 
+            --gold-light: #f4d03f;  
+            --gold-dark: #a88e5a;
+            --dark-blue: #1a252f;
+            --bg-color: #f4f4f2;
+            --highlight: rgba(212, 175, 55, 0.4);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: move-light 8s linear infinite;
+            filter: blur(10px);
+            opacity: 0.7;
+        }
+
+        @keyframes move-light {
+            0%   { transform: translate(-50%, -50%); top: 0; left: 0; }            
+            25%  { transform: translate(-50%, -50%); top: 0; left: 100%; } 
+            50%  { transform: translate(-50%, -50%); top: 100%; left: 100%; } 
+            75%  { transform: translate(-50%, -50%); top: 100%; left: 0; } 
+            100% { transform: translate(-50%, -50%); top: 0; left: 0; }            
+        }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 20px 15px; 
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 4px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(102, 102, 102, 0.7);
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #eee; 
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .status-msg {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, #d4af37, #a88e5a);
+            color: white;
+            border: none;
+            padding: 16px 20px; 
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            width: 100%;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .main-btn.playing { 
+            background: linear-gradient(to bottom, #1a252f, #0d1318);
+        }
+
+        .btn-icon-svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        input[type=range] {
+            accent-color: var(--gold);
+            height: 25px; 
+            width: 100px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: left;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .word-highlight {
+            background-color: var(--highlight);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        @media (max-width: 380px) {
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1rem; }
+            .art-card { padding: 15px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow"></div>
+        
+        <div class="art-card">
+            <div class="content">
+                <h1 id="title">Il Viandante sul mare di nebbia</h1>
+                <span class="artist-name">Caspar David Friedrich, 1818</span>
+                <span class="quote">Dipinto da Gabriele Branciforti 3C A.S.25/26</span>
+                
+                <div class="controls-panel">
+                    <div id="statusLabel" class="status-msg">Guida pronta all'uso</div>
+                    
+                    <button id="mainBtn" class="main-btn" onclick="toggleAudio()">
+                        <span id="btnIconContainer">
+                            <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>
+                        </span>
+                        <span id="btnText">Ascolta descrizione</span>
+                    </button>
+
+                    <div class="speed-control">
+                        <span>Velocità:</span>
+                        <input type="range" id="speedRange" min="5" max="20" step="1" value="10">
+                        <span id="speedVal">1.0x</span>
+                    </div>
+                </div>
+
+                <div class="description" id="textToRead">Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore. Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const synth = window.speechSynthesis;
+        let utterance = null;
+        const textToRead = document.getElementById('textToRead');
+        const originalHTML = textToRead.innerHTML;
+        
+        const playIcon = `<svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>`;
+        const stopIcon = `<svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M18,18H6V6H18V18Z" /></svg>`;
+
+        let lastCharIndex = 0; 
+        let isInternalAction = false; 
+
+        // Modificata la logica della velocità: 2x ora è più lento/naturale
+        function getRealRate(val) {
+            const visualVal = val / 10;
+            if (visualVal <= 1.0) return visualVal; 
+            // Ridotta la progressione per i valori sopra 1.0x
+            return 1.0 + (visualVal - 1.0) * 0.35; 
+        }
+
+        function humanizeText(text) {
+            return text
+                .replace(/\./g, '... ') 
+                .replace(/,/g, ', ')    
+                .replace(/ Friedrich/g, ' Fried-rich'); 
+        }
+
+        document.getElementById('speedRange').oninput = (e) => {
+            const visualValue = (e.target.value / 10).toFixed(1);
+            document.getElementById('speedVal').innerText = visualValue + "x";
+            
+            if (synth.speaking) {
+                isInternalAction = true;
+                synth.cancel();
+                setTimeout(() => {
+                    startAudio(lastCharIndex);
+                    isInternalAction = false;
+                }, 10);
+            }
+        };
+
+        function toggleAudio() {
+            isInternalAction = true;
+            if (synth.speaking) {
+                synth.cancel();
+                lastCharIndex = 0;
+                resetUI();
+                setTimeout(() => { isInternalAction = false; }, 50);
+                return;
+            }
+            synth.cancel(); 
+            startAudio(0);
+            isInternalAction = false;
+        }
+
+        function startAudio(startIndex = 0) {
+            const fullText = textToRead.innerText;
+            const textToSpeak = fullText.substring(startIndex);
+            const processedText = humanizeText(textToSpeak);
+
+            utterance = new SpeechSynthesisUtterance(processedText);
+            utterance.lang = 'it-IT';
+            utterance.rate = getRealRate(document.getElementById('speedRange').value);
+            utterance.pitch = 0.95; 
+
+            const voices = synth.getVoices();
+            const preferredVoice = voices.find(v => 
+                v.lang.includes('it-IT') && 
+                (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Premium'))
+            ) || voices.find(v => v.lang.includes('it-IT'));
+
+            if (preferredVoice) utterance.voice = preferredVoice;
+
+            utterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    const globalIndex = startIndex + event.charIndex;
+                    lastCharIndex = globalIndex;
+                    highlightWord(globalIndex, event.charLength);
+                }
+            };
+
+            utterance.onstart = () => {
+                document.getElementById('mainBtn').classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = stopIcon;
+                document.getElementById('statusLabel').innerText = "Lettura in corso...";
+            };
+
+            utterance.onend = () => {
+                if (!isInternalAction) {
+                    lastCharIndex = 0;
+                    resetUI();
+                }
+            };
+
+            utterance.onerror = (e) => {
+                if (!isInternalAction && e.error !== 'interrupted' && e.error !== 'canceled') {
+                    resetUI();
+                    document.getElementById('statusLabel').innerText = "Errore. Riprova.";
+                }
+            };
+
+            synth.speak(utterance);
+        }
+
+        function highlightWord(charIndex, charLength) {
+            const text = textToRead.innerText;
+            const before = text.substring(0, charIndex);
+            const word = text.substring(charIndex, charIndex + charLength);
+            const after = text.substring(charIndex + charLength);
+            textToRead.innerHTML = `${before}<span class="word-highlight">${word}</span>${after}`;
+        }
+
+        function resetUI() {
+            textToRead.innerHTML = originalHTML;
+            document.getElementById('mainBtn').classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = playIcon;
+            document.getElementById('statusLabel').innerText = "Guida pronta all'uso";
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => synth.getVoices();
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+
+</body>
+</html>
