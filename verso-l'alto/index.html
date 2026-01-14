@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Kandinskij</title>
+    <style>
+        :root {
+            /* Palette basata sui colori dell'opera "Verso l'alto" di Kandinskij */
+            --kand-green: #9db08c;      
+            --kand-pink: #f4c2c2;       
+            --kand-orange: #f1934c;     
+            --kand-grey: #b2b2b2;       
+            --kand-red: #d64545;        
+            --kand-black: #1a1a1a;      
+            --gold: #d4af37;
+            --gold-bright: #fff9e6; 
+            --gold-light: #f4d03f;  
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Sfondo ultra-lento (60s) con i colori di Kandinskij */
+            background: linear-gradient(125deg, 
+                var(--kand-green), 
+                var(--kand-pink), 
+                var(--kand-orange), 
+                var(--kand-grey), 
+                var(--kand-red));
+            background-size: 300% 300%;
+            animation: kandGradient 60s ease-in-out infinite;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes kandGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(40px);
+            opacity: 0.35;
+        }
+
+        .glow-1 { top: 0; left: 0; animation: move-light-1 40s linear infinite; }
+        .glow-2 { bottom: 0; right: 0; animation: move-light-2 40s linear infinite; }
+
+        @keyframes move-light-1 {
+            0%   { transform: translate(-30%, -30%); top: 0; left: 0; }            
+            50%  { transform: translate(-30%, -30%); top: 80%; left: 80%; } 
+            100% { transform: translate(-30%, -30%); top: 0; left: 0; }            
+        }
+        @keyframes move-light-2 {
+            0%   { transform: translate(30%, 30%); bottom: 0; right: 0; }            
+            50%  { transform: translate(30%, 30%); bottom: 80%; right: 80%; } 
+            100% { transform: translate(30%, 30%); bottom: 0; right: 0; }            
+        }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(68, 68, 68, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, #d4af37, #a88e5a);
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+            transition: transform 0.2s ease;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        #btnIconContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+        }
+
+        .main-btn.playing { 
+            background: var(--kand-green);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--kand-green);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        <div class="light-glow glow-2"></div>
+        
+        <div class="art-card">
+            <h1>Verso l'alto (Empor)</h1>
+            <span class="artist-name">Vasilij Kandinskij, 1929</span>
+            <span class="quote">Dipinto da Erika Caruso - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">
+                Nel 1929 Kandinskij dipinse alcuni volti astratti. Del volto rimane una vaga allusione strutturale. Infatti Kandinskij usò forme primarie vennero composte tra loro in strutture che ricordano il viso di una persona. L’ opera Verso l’alto rappresenta il busto di un personaggio sorretto da una forma geometrica composta da un trapezio e da una lettera E. Superiormente il semicerchio e le linee rette orizzontali rappresentano un volto di profilo mentre in basso è rappresentano un corpo con le spalle spioventi. La E molto grande e nera che si individua nella parte destra di quello che potrebbe essere il busto della figura è forse l’iniziale di un termine tedesco. Si tratta di Empor che significa alto. La forma del viso è astratta ed è colorata con toni di verde. Le campiture che compongono il viso astratto con linee di contorno precise scure all’interno e colorato con la tecnica dello sfumato. In basso è dipinto di colore rosa sfumato la metà superiore, invece è dipinta di grigio con un punto nero che rappresenta un occhio. L’altra parte superiore è dipinta di arancione. Le linee orizzontali sono dipinte di rosso. Lo spazio è tridimensionale e insistente in seguito alla scelta dell’artista di utilizzare un linguaggio astratto. Le parti che compongono l’opera sono in perfetto equilibrio sulla verticale del dipinto. La verticale è infatti determinante perchè àncora le forme semplici di destra e di sinistra nel loro sviluppo verso l’alto.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Kandinskij/gi, 'Kandìnschi') 
+                .replace(/Empor/gi, 'Empòr')
+                .replace(/1929/g, 'millenovecentoventinove')
+                .replace(/A\.S\./gi, 'Anno Scolastico') 
+                .replace(/\. /g, '... ') 
+                .replace(/: /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
