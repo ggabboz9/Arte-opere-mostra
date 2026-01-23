@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Vincent Van Gogh</title>
+    <style>
+        :root {
+            /* Palette basata sulle sfumature di giallo dei Girasoli */
+            --vg-yellow-bright: #f4d03f;
+            --vg-yellow-deep: #d4ac0d;
+            --vg-ochre: #b7950b;
+            --vg-brown: #7e5109;
+            --gold-primary: #d4af37;
+            --gold-dark: #a88e5a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Sfondo radiante che richiama l'energia dei girasoli */
+            background: radial-gradient(circle, 
+                var(--vg-yellow-bright), 
+                var(--vg-yellow-deep), 
+                var(--vg-ochre), 
+                var(--vg-brown));
+            background-size: 200% 200%;
+            animation: sunGradient 20s ease-in-out infinite alternate;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes sunGradient {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(50px);
+            opacity: 0.4;
+        }
+
+        .glow-1 { top: -50px; left: -50px; animation: pulse 5s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.2; } to { opacity: 0.5; } }
+
+        .art-card {
+            background: #fffdf2; /* Bianco crema caldo */
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #4e342e;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #5d4037;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(93, 64, 55, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #e0e0e0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, var(--vg-yellow-deep), var(--vg-brown));
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(126, 81, 9, 0.3);
+            width: 100%;
+            user-select: none;
+            transition: transform 0.2s ease, filter 0.3s ease;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        .main-btn.playing { 
+            filter: brightness(1.1);
+            background: #5d4037;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #5d4037;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--vg-brown);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #3e2723;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        
+        <div class="art-card">
+            <h1>I Girasoli</h1>
+            <span class="artist-name">Vincent Van Gogh (1889)</span>
+            <span class="quote">Dipinto da Emma Chiaramonte e Kerola Reale 3E - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">
+                Van Gogh nel 1889 inviò questa tela a Parigi al fratello Theo, un'opera in cui utilizzò solamente tre sfumature di giallo con l'intenzione di provare la possibilità di realizzare un’opera con le variazioni di un solo colore. I Girasoli sono un esempio della sperimentazione del pittore che viveva la pittura come una terapia esistenziale quotidiana. La tela, che mostra fiori in diversi gradi di maturazione, con alcuni petali ancora presenti, altri appassiti e altri che espongono la parte centrale ricca di semi, con i fiori che si dispongono in modo apparentemente casuale mostrando diverse angolazioni, e sul vaso una dedica con il nome Vincent. Van Gogh utilizzò solamente tre sfumature di giallo per dipingere la natura morta, con l’intenzione di provare la possibilità di realizzare un’opera con le variazioni di un solo colore. Van Gogh, nel corso del suo soggiorno a Parigi, frequentò gli ambienti artistici anti accademici e avviò una sua sperimentazione formale e tecnica. Queste ricerche furono a volte del tutto istintive e guidate dallo stato d’animo del momento. I Girasoli sono un esempio della sperimentazione del pittore che viveva la pittura come una terapia esistenziale quotidiana, una ricerca artistica e un filtro con il quale affrontare la realtà. I fiori sono disegnati velocemente con grandi pennellate e linee spesse di contorno. Anche il vaso è colorato con due campiture bidimensionali senza chiaroscuro. Ugualmente, piano e sfondo sono dipinti, semplicemente, con colore giallo bidimensionale.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Van Gogh/gi, 'Van Gòg') 
+                .replace(/Theo/gi, 'Tèo')
+                .replace(/A\.S\./gi, 'Anno Scolastico')
+                .replace(/\. /g, '... ') 
+                .replace(/, /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
